@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planimle | Wabi-Sabi Folk Garden App</title>
+    
+    <!-- Google Fonts: Quicksand for soft earthy text, VT323 for retro JRPG pixel accents -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'wabi-offwhite': '#F7F5F0',
+                        'wabi-cream': '#EFEBDC',
+                        'wabi-sage': '#B4C5B0',
+                        'wabi-sage-light': '#D0DEC9',
+                        'wabi-olive': '#3A4B2A',
+                        'wabi-olive-dark': '#232D19',
+                        'wabi-earth': '#8B7E66'
+                    },
+                    fontFamily: {
+                        'sans': ['Quicksand', 'sans-serif'],
+                        'pixel': ['VT323', 'monospace'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'bob-1': 'bob 4s ease-in-out infinite',
+                        'bob-2': 'bob 5s ease-in-out 1s infinite',
+                        'bob-3': 'bob 3.5s ease-in-out 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        bob: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F7F5F0;
+            color: #3A4B2A;
+            /* Subtle organic noise overlay for the Wabi-Sabi feel */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        /* Retro JRPG-inspired pixel borders */
+        .pixel-border {
+            border: 4px solid #3A4B2A;
+            border-radius: 4px;
+            box-shadow: 6px 6px 0px #B4C5B0;
+            transition: all 0.2s ease;
+        }
+
+        .pixel-border:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px #B4C5B0;
+        }
+
+        /* Tactile interactive buttons */
+        .tactile-btn {
+            border: 4px solid #3A4B2A;
+            border-radius: 4px;
+            box-shadow: 4px 4px 0px #3A4B2A;
+            transition: all 0.1s ease;
+        }
+
+        .tactile-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #3A4B2A;
+        }
+
+        /* Custom input styling */
+        .wabi-input {
+            border: 4px solid #3A4B2A;
+            background-color: #F7F5F0;
+            outline: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .wabi-input:focus {
+            background-color: #fff;
+            border-color: #3A4B2A;
+        }
+
+        .pixel-corners {
+            clip-path: polygon(
+                4px 0, calc(100% - 4px) 0, 
+                100% 4px, 100% calc(100% - 4px), 
+                calc(100% - 4px) 100%, 4px 100%, 
+                0 calc(100% - 4px), 0 4px
+            );
+        }
+
+        /* Utility for hiding scrollbar but allowing scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden selection:bg-wabi-sage selection:text-wabi-olive-dark">
+
+    <nav class="w-full p-6 flex justify-between items-center max-w-6xl mx-auto relative z-10">
+        <div class="flex items-center gap-2 cursor-pointer">
+            <span class="text-3xl text-wabi-olive">🌸</span>
+            <h1 class="font-pixel text-4xl text-wabi-olive font-bold tracking-wider mt-1">Planimle</h1>
+        </div>
+        <div class="hidden sm:flex gap-6 font-semibold text-wabi-olive">
+            <a href="#features" class="hover:text-wabi-earth transition-colors">Features</a>
+            <a href="#waitlist" class="hover:text-wabi-earth transition-colors">Waitlist</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 pt-12 pb-24 relative z-10">
+        
+        <section class="flex flex-col lg:flex-row items-center justify-between gap-12 mt-10">
+            <!-- Left Text Content -->
+            <div class="flex-1 text-center lg:text-left">
+                <div class="inline-block bg-wabi-sage-light text-wabi-olive-dark font-bold px-4 py-1 rounded-full mb-6 font-pixel text-xl uppercase tracking-widest pixel-border">
+                    Cozy Vibe & Aesthetic
+                </div>
+                <h2 class="text-5xl md:text-6xl font-bold text-wabi-olive-dark mb-6 leading-tight">
+                    Your Wabi-Sabi <br> Folk Garden App.
+                </h2>
+                <p class="text-xl text-wabi-olive mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
+                    Find deep peace in your routines. Build your meadow sanctuary, manage your kitchen garden, and unwind with ambient nature soundscapes.
+                </p>
+                
+                <!-- Waitlist Form -->
+                <div id="waitlist-container" class="max-w-md mx-auto lg:mx-0 bg-wabi-cream p-6 pixel-border relative">
+                    <div class="absolute -top-4 -right-4 text-4xl animate-float">🌱</div>
+                    <form id="waitlist-form" class="flex flex-col gap-3">
+                        <input 
+                            type="text" 
+                            id="name-input"
+                            placeholder="Your Name..." 
+                            required
+                            class="wabi-input w-full px-4 py-3 rounded text-lg placeholder-wabi-earth text-wabi-olive-dark font-semibold"
+                        >
+                        <input 
+                            type="email" 
+                            id="email-input"
+                            placeholder="Enter your email..." 
+                            required
+                            class="wabi-input w-full px-4 py-3 rounded text-lg placeholder-wabi-earth text-wabi-olive-dark font-semibold"
+                        >
+                        <button 
+                            type="submit" 
+                            id="submit-btn"
+                            class="tactile-btn bg-wabi-sage text-wabi-olive-dark font-bold font-pixel text-2xl px-6 py-3 uppercase tracking-wider whitespace-nowrap mt-2"
+                        >
+                            Join Waitlist
+                        </button>
+                    </form>
+                    <p class="text-sm mt-3 text-wabi-earth font-medium">Reserve your spot in the meadow.</p>
+                </div>
+
+                <!-- Success Message (Hidden by default) -->
+                <div id="success-message" class="hidden max-w-md mx-auto lg:mx-0 bg-wabi-sage-light p-6 pixel-border text-center">
+                    <span class="text-4xl block mb-2">🍵</span>
+                    <h3 class="font-pixel text-3xl text-wabi-olive-dark mb-2">Welcome to the Meadow</h3>
+                    <p class="text-wabi-olive font-semibold">We've saved your spot. A companion will be waiting for you soon.</p>
+                </div>
+            </div>
+
+            <!-- Right Illustration/Visual -->
+            <div class="flex-1 w-full max-w-lg relative mt-12 lg:mt-0 animate-float-delayed">
+                <!-- Decorative background blob -->
+                <div class="absolute inset-0 bg-wabi-sage rounded-full opacity-30 blur-3xl"></div>
+                
+                <!-- Pure HTML/CSS App Mockup -->
+                <div class="relative w-full aspect-[4/5] rounded-[2rem] border-4 border-wabi-olive shadow-[8px_8px_0px_#B4C5B0] bg-[#EAF0E7] overflow-hidden group flex flex-col font-sans select-none">
+                    
+                    <!-- App Header Nav -->
+                    <div class="flex justify-between items-start z-20 p-4 bg-gradient-to-b from-[#EAF0E7] to-transparent">
+                        <div class="flex items-start gap-1">
+                            <span class="text-xl">🌱</span>
+                            <span class="font-pixel text-xl text-wabi-olive-dark font-bold leading-none max-w-[120px] pt-1 tracking-wide">The Meadow<br>Sanctuary</span>
+                        </div>
+                        <div class="flex gap-2 relative">
+                            <div onclick="showDevMessage()" class="bg-white px-3 py-1.5 rounded-[1.5rem] shadow-[0_2px_0_rgba(58,75,42,0.1)] border border-[#D0DEC9] flex flex-col items-center justify-center leading-none text-center cursor-pointer hover:bg-[#F7F5F0] transition-colors">
+                                <span class="text-[11px] font-bold text-wabi-olive-dark mb-0.5"><span class="text-yellow-400">☀️</span> Garden</span>
+                                <span class="text-[10px] text-wabi-earth font-medium">Rest (5)</span>
+                            </div>
+                            <div onclick="showDevMessage()" class="bg-[#597A5E] text-white px-4 py-2 rounded-[1.25rem] shadow-[0_2px_0_rgba(35,45,25,0.3)] font-bold text-[13px] flex items-center justify-center leading-none hover:bg-wabi-olive transition-colors cursor-pointer">
+                                <span class="mr-1 opacity-70">+</span> Add<br>Plan
+                            </div>
+                            <!-- Developing Message Tooltip -->
+                            <div id="dev-message" class="absolute top-[110%] right-0 bg-wabi-sage-light text-wabi-olive-dark text-[11px] font-bold px-3 py-1.5 rounded border-2 border-wabi-olive shadow-[2px_2px_0px_#3A4B2A] opacity-0 pointer-events-none transition-opacity duration-300 whitespace-nowrap z-50">
+                                We're developing this feature 😊
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Canvas Area -->
+                    <div class="relative flex-1 w-full h-full -mt-4">
+                        
+                        <!-- Dashed Path Curve -->
+                        <svg class="absolute top-[45%] left-0 w-full h-24 -translate-y-1/2 opacity-20 pointer-events-none" viewBox="0 0 100 30" preserveAspectRatio="none">
+                            <path d="M-10,15 Q30,30 60,10 T110,15" fill="none" stroke="#7D9A74" stroke-width="2" stroke-dasharray="3 3" stroke-linecap="round" />
+                        </svg>
+
+                        <!-- POND AREA -->
+                        <div class="absolute bottom-[10%] left-[8%] w-56 h-28 bg-[#D1EAF5]/70 rounded-[100%] blur-[1px] border-2 border-white/50 flex flex-col items-center justify-end pb-3">
+                        </div>
+
+                        <!-- ENVIRONMENTS & COMPANIONS -->
+                        
+                        <!-- Oak Grove & Dog -->
+                        <div class="absolute top-[15%] left-[20%] flex flex-col items-center pointer-events-none">
+                            <div class="w-16 h-16 bg-[#B4C5B0]/20 rounded-full absolute blur-xl top-2"></div>
+                            <span class="text-4xl relative z-10 drop-shadow-sm">🌳</span>
+                        </div>
+                        <div class="absolute top-[22%] left-[32%] group/pet cursor-pointer animate-bob-3 z-10">
+                            <div class="text-3xl drop-shadow-sm">🐕</div>
+                            <div class="absolute -top-1 -right-1 bg-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] border border-[#d0d0d0] shadow-sm z-10">💧</div>
+                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-6 h-1.5 bg-black/5 rounded-[100%] blur-[2px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Routine</span>
+                                <span class="leading-none">Hydration Goal</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                        <!-- Mossy Log & Snail -->
+                        <div class="absolute top-[32%] left-[42%] flex flex-col items-center pointer-events-none">
+                            <span class="text-3xl drop-shadow-sm">🪵</span>
+                        </div>
+                        <div class="absolute top-[34%] left-[54%] group/pet cursor-pointer animate-float-delayed z-0">
+                            <div class="text-2xl drop-shadow-sm filter grayscale-[10%]">🐌</div>
+                            <div class="absolute -top-1 -right-2 bg-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] border border-[#d0d0d0] shadow-sm z-10">🌱</div>
+                            <div class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-1 bg-black/5 rounded-[100%] blur-[1px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Routine</span>
+                                <span class="leading-none">Water Bonsai</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                        <!-- Big Cat -->
+                        <div class="absolute top-[35%] right-[15%] group/pet cursor-pointer animate-bob-1 z-10">
+                            <div class="text-[3.5rem] drop-shadow-sm filter grayscale-[10%] brightness-105">🐱</div>
+                            <div class="absolute top-0 -right-2 bg-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] border border-[#d0d0d0] shadow-sm z-10">📚</div>
+                            <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-2 bg-black/5 rounded-[100%] blur-[2px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Habit</span>
+                                <span class="leading-none">Read 10 Pages</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                        <!-- Bunny on path -->
+                        <div class="absolute top-[50%] left-[22%] group/pet cursor-pointer animate-bob-1 z-10">
+                            <div class="text-2xl drop-shadow-sm">🐰</div>
+                            <div class="absolute -top-1 -right-2 bg-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] border border-[#d0d0d0] shadow-sm z-10">🥕</div>
+                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-1.5 bg-black/5 rounded-[100%] blur-[2px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Meal</span>
+                                <span class="leading-none">Prep Veggies</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                        <!-- Hedgehog with Broom -->
+                        <div class="absolute top-[54%] left-[42%] group/pet cursor-pointer animate-bob-2 z-10">
+                            <div class="text-[2.5rem] drop-shadow-sm">🦔</div>
+                            <div class="absolute -top-3 -left-2 bg-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] border border-[#d0d0d0] shadow-sm z-10">🧹</div>
+                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-7 h-1.5 bg-black/5 rounded-[100%] blur-[2px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Chore</span>
+                                <span class="leading-none">Sweep Balcony</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                        <!-- Myco Patch -->
+                        <div class="absolute bottom-[30%] left-[28%] flex flex-col items-center pointer-events-none">
+                            <span class="text-2xl drop-shadow-sm">🍄</span>
+                        </div>
+                        <span class="absolute bottom-[25%] left-[40%] text-[10px] opacity-80">🌱</span>
+                        <span class="absolute bottom-[26%] left-[45%] text-[10px] opacity-80">🌸</span>
+
+                        <!-- Big Frog by Pond -->
+                        <div class="absolute bottom-[16%] left-[12%] group/pet cursor-pointer animate-bob-3 z-10">
+                            <div class="text-[3.5rem] drop-shadow-sm">🐸</div>
+                            <div class="absolute -top-1 right-0 bg-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] border border-[#d0d0d0] shadow-sm z-10">🔥</div>
+                            <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-2 bg-[#81B3C9]/40 rounded-[100%] blur-[2px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Chore</span>
+                                <span class="leading-none">Cook Dinner</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                        <!-- Lantern -->
+                        <div class="absolute bottom-[32%] right-[25%] flex flex-col items-center animate-pulse pointer-events-none">
+                            <span class="text-2xl drop-shadow-sm">🏮</span>
+                        </div>
+
+                        <!-- Pine Rest Area -->
+                        <div class="absolute bottom-[8%] right-[15%] w-32 h-20 bg-[#B4C5B0]/10 rounded-[100%] absolute blur-xl"></div>
+
+                        <!-- Penguin -->
+                        <div class="absolute bottom-[24%] right-[32%] group/pet cursor-pointer animate-bob-2 z-0">
+                            <div class="text-2xl drop-shadow-sm">🐧</div>
+                            <div class="absolute -top-1 -right-2 bg-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] border border-[#d0d0d0] shadow-sm z-10">🎨</div>
+                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-1.5 bg-black/5 rounded-[100%] blur-[2px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Hobby</span>
+                                <span class="leading-none">Daily Sketch</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                        <!-- Deer -->
+                        <div class="absolute bottom-[12%] right-[12%] group/pet cursor-pointer animate-bob-3 z-0">
+                            <div class="text-[3rem] drop-shadow-sm">🦌</div>
+                            <div class="absolute -top-1 -right-1 bg-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] border border-[#d0d0d0] shadow-sm z-10">🌿</div>
+                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-2 bg-black/5 rounded-[100%] blur-[2px]"></div>
+                            <!-- Task Tooltip -->
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-wabi-olive-dark text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-[#D0DEC9] opacity-0 group-hover/pet:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20 flex flex-col items-center">
+                                <span class="text-[8px] text-wabi-earth font-medium mb-0.5 leading-none">Habit</span>
+                                <span class="leading-none">Meditation</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Subtle shine effect on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-30"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="mt-32">
+            <h2 class="text-center font-pixel text-5xl text-wabi-olive-dark mb-4">Core Calming Features</h2>
+            <p class="text-center text-wabi-earth font-semibold mb-16 text-lg">Designed for deep legibility and aesthetic balance.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Feature 1: Meadow -->
+                <div class="bg-wabi-sage pixel-border p-8 flex flex-col h-full hover:bg-wabi-sage-light transition-colors duration-300">
+                    <div class="text-5xl mb-6 bg-wabi-offwhite w-20 h-20 flex items-center justify-center rounded-full border-4 border-wabi-olive">🏡</div>
+                    <h3 class="font-pixel text-3xl text-wabi-olive-dark mb-4">The Meadow Sanctuary</h3>
+                    <p class="text-wabi-olive-dark font-medium leading-relaxed mb-4 flex-grow">
+                        An interactive task meadow where planned routines turn into adorable wandering garden companions. Collect and discover over 15 unique animals as you grow your habits!
+                    </p>
+                    <ul class="text-sm font-semibold text-wabi-olive-dark space-y-2">
+                        <li class="flex items-center gap-2"><span class="text-xl">🐌</span> Snails for easy tasks</li>
+                        <li class="flex items-center gap-2"><span class="text-xl">🐰</span> Bunnies for quick habits</li>
+                        <li class="flex items-center gap-2"><span class="text-xl">🐕</span> Puppies for medium effort</li>
+                        <li class="flex items-center gap-2"><span class="text-xl">🦊</span> Foxes for focus sessions</li>
+                        <li class="flex items-center gap-2"><span class="text-xl">🦌</span> Deer for major milestones</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 2: Wabi-Sabi Space -->
+                <div class="bg-wabi-cream pixel-border p-8 flex flex-col h-full hover:bg-wabi-offwhite transition-colors duration-300">
+                    <div class="text-5xl mb-6 bg-wabi-sage-light w-20 h-20 flex items-center justify-center rounded-full border-4 border-wabi-olive">🍵</div>
+                    <h3 class="font-pixel text-3xl text-wabi-olive-dark mb-4">Wabi-Sabi Calming Space</h3>
+                    <p class="text-wabi-olive-dark font-medium leading-relaxed mb-4 flex-grow">
+                        An immersive safe haven designed with ambient nature sound generators and responsive stress-relieving exercises.
+                    </p>
+                    <div class="flex gap-2 flex-wrap mt-auto">
+                        <span class="text-xs font-bold border-2 border-wabi-olive px-2 py-1 rounded-full">Singing Bowls</span>
+                        <span class="text-xs font-bold border-2 border-wabi-olive px-2 py-1 rounded-full">Soft Rain</span>
+                        <span class="text-xs font-bold border-2 border-wabi-olive px-2 py-1 rounded-full">Forest Wind</span>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Kitchen Garden -->
+                <div class="bg-wabi-sage pixel-border p-8 flex flex-col h-full hover:bg-wabi-sage-light transition-colors duration-300">
+                    <div class="text-5xl mb-6 bg-wabi-offwhite w-20 h-20 flex items-center justify-center rounded-full border-4 border-wabi-olive">🌱</div>
+                    <h3 class="font-pixel text-3xl text-wabi-olive-dark mb-4">The Kitchen Garden</h3>
+                    <p class="text-wabi-olive-dark font-medium leading-relaxed mb-4 flex-grow">
+                        A modular dashboard to easily manage your home provisions and weekly culinary calendar. Optimized for mobile use.
+                    </p>
+                    <div class="bg-wabi-olive-dark text-wabi-cream p-3 rounded text-sm font-pixel tracking-wide mt-auto">
+                        > Tab: Pantry & Grocery<br>
+                        > Tab: Meal Prep Planner<br>
+                        > Tab: Interactive Outline View
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-wabi-olive text-wabi-sage-light py-10 mt-12 border-t-8 border-wabi-olive-dark">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🌸</span>
+                <span class="font-pixel text-3xl font-bold tracking-widest text-wabi-offwhite">Planimle</span>
+            </div>
+            <p class="font-medium text-sm text-center md:text-left">
+                Cultivating peaceful routines. &copy; <span id="year"></span> Planimle.
+            </p>
+            <div class="flex gap-4 font-pixel text-xl">
+                <a href="https://www.instagram.com/planimle/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Handle Feature Development Message for header buttons
+        let devMsgTimeout;
+        function showDevMessage() {
+            const msg = document.getElementById('dev-message');
+            msg.style.opacity = '1';
+            
+            clearTimeout(devMsgTimeout);
+            devMsgTimeout = setTimeout(() => {
+                msg.style.opacity = '0';
+            }, 2500);
+        }
+
+        // Audio Context Setup for the "Relaxing, sparkling pentatonic chord"
+        // We initialize this on user interaction (form submit) to comply with browser autoplay policies
+        function playSuccessChime() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioContext();
+                
+                // Pentatonic chord frequencies (C Major Pentatonic: C5, E5, G5, A5, C6)
+                // Using higher octaves for a "sparkling" feel
+                const notes = [523.25, 659.25, 783.99, 880.00, 1046.50];
+                const now = ctx.currentTime;
+
+                notes.forEach((freq, index) => {
+                    const osc = ctx.createOscillator();
+                    const gainNode = ctx.createGain();
+                    
+                    // Sine wave for a soft, gentle bell/chime sound
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now);
+
+                    // Connect oscillator to gain node, then to destination (speakers)
+                    osc.connect(gainNode);
+                    gainNode.connect(ctx.destination);
+
+                    // Envelope generation (Attack, Decay, Sustain, Release)
+                    // Arpeggiate the chord slightly by delaying the start of each note
+                    const startTime = now + (index * 0.08); 
+                    
+                    // Volume envelope
+                    gainNode.gain.setValueAtTime(0, startTime);
+                    // Fast attack
+                    gainNode.gain.linearRampToValueAtTime(0.15, startTime + 0.05);
+                    // Long, gentle release (wabi-sabi fade out)
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 2.5);
+
+                    osc.start(startTime);
+                    osc.stop(startTime + 3); // Stop processing after it's faded out
+                });
+            } catch (e) {
+                console.log("Audio API not supported or blocked, skipping chime.");
+            }
+        }
+
+        // Handle Waitlist Form Submission
+        const form = document.getElementById('waitlist-form');
+        const container = document.getElementById('waitlist-container');
+        const successMessage = document.getElementById('success-message');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent page reload
+            
+            const name = document.getElementById('name-input').value;
+            const email = document.getElementById('email-input').value;
+            
+            if(name && email) {
+                // Update button state while processing
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Planting...';
+                submitBtn.disabled = true;
+
+                // --- INTEGRATION POINT: SPREADSHEET & EMAIL ---
+                // Replace this URL with the Google Apps Script Web App URL you generate
+                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxl2PkfMUFcDJkSDjcq10w8hxDIenQxlb4S4c0FobQrG0qhUoTBImEYqiZsfohyBDDx/exec'; 
+
+                try {
+                    // Send data to Google Apps Script
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ name, email }),
+                        // We use 'text/plain' to bypass a strict browser security rule (CORS) 
+                        // that Google Apps Script doesn't handle well natively.
+                        headers: { 
+                            'Content-Type': 'text/plain;charset=utf-8',
+                        }
+                    });
+
+                    // 1. Play the calming audio feedback
+                    playSuccessChime();
+
+                    // 2. Hide form, show success message with a smooth transition
+                    container.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        container.classList.add('hidden');
+                        successMessage.classList.remove('hidden');
+                        // Trigger reflow
+                        void successMessage.offsetWidth;
+                        successMessage.style.opacity = '1';
+                        successMessage.style.transition = 'opacity 0.5s ease';
+                    }, 300); // Wait for fade out
+                    
+                    console.log("New waitlist signup:", name, email);
+
+                } catch (error) {
+                    console.error("Submission failed:", error);
+                    alert("There was a gentle disturbance in the meadow. Please try again.");
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
