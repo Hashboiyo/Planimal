@@ -1,0 +1,6 @@
+{
+  "name": "Yaran-e-Fuqra Portal",
+  "description": "A responsive single-page portal for Yaran-e-Fuqra NGO, featuring a live video hero, mission overview, donation system, and interactive orphanage visit registration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
